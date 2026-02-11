@@ -1,0 +1,27 @@
+{
+  "name": "@burnt-labs/verification",
+  "version": "0.1.0",
+  "description": "White-label verification library for Burnt Labs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "keywords": [
+    "verification",
+    "reclaim",
+    "zk",
+    "burnt"
+  ],
+  "author": "Burnt Labs",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@reclaimprotocol/js-sdk": "^4.11.0"
+  }
+}
