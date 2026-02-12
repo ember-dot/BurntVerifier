@@ -1,5 +1,6 @@
 import type { IVerificationProvider } from './interfaces/IProvider';
 import { ReclaimAdapter } from './adapters/ReclaimAdapter';
+import { MockAdapter } from './adapters/MockAdapter';
 import type { VerificationRequestOptions, BurntAttributeCertificate } from './types';
 
 export interface BurntVerifierConfig {
@@ -43,7 +44,6 @@ export class BurntVerifier {
             // Future: this.adapter = new PrimusAdapter(config.appId, config.appSecret);
             throw new Error("Primus provider not yet implemented");
         } else if (config.defaultProvider === 'mock' || config.mode === 'mock') {
-            const { MockAdapter } = require('./adapters/MockAdapter');
             this.adapter = new MockAdapter();
         } else {
             // Default to Reclaim

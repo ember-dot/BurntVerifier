@@ -43,8 +43,8 @@ export class ReclaimAdapter implements IVerificationProvider {
             reclaimRequest.setAppCallbackUrl(options.callbackUrl);
         }
 
-        // Add context/metadata if needed
-        if (options.metadata) {
+        // Only add context if metadata is explicitly provided and non-empty
+        if (options.metadata && Object.keys(options.metadata).length > 0) {
             reclaimRequest.addContext(
                 `0x0`, // Context ID/Address
                 JSON.stringify(options.metadata)
@@ -81,16 +81,31 @@ export class ReclaimAdapter implements IVerificationProvider {
             request.startSession({
                 onSuccess: (response: any) => {
                     console.log('ReclaimAdapter: Verification success response:', response);
-                    const proof = Array.isArray(response) ? response[0] : response;
 
-                    if (!proof) {
+                    // Reclaim v4 can return a single proof or an array of proofs
+                    const proofs = Array.isArray(response) ? response : [response];
+
+                    if (proofs.length === 0 || !proofs[0]) {
                         console.error('ReclaimAdapter: No proof found in success response');
                         reject(new Error('No proof received from Reclaim'));
                         return;
                     }
 
-                    // Transform Reclaim proof to Burnt Certificate
-                    const certificate = this.mapReclaimProofToCertificate(sessionId, proof);
+                    // Merge claims from all proofs
+                    let allClaims = {};
+                    proofs.forEach(proof => {
+                        const { claims } = this.mapReclaimProofToCertificate(sessionId, proof);
+                        allClaims = { ...allClaims, ...claims };
+                    });
+
+                    // Create the final certificate using the first proof for base metadata
+                    const certificate = this.mapReclaimProofToCertificate(sessionId, proofs[0]);
+                    certificate.claims = allClaims;
+
+                    // If multiple proofs, store them all in context
+                    if (proofs.length > 1) {
+                        certificate.context = proofs;
+                    }
 
                     // Cleanup
                     this.activeRequests.delete(sessionId);
