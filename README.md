@@ -7,8 +7,10 @@ A white-label verification SDK for Burnt Labs, enabling seamless user attribute 
 - **White-Label Abstraction**: Hide the complexity of underlying verification providers (like Reclaim Protocol).
 - **Universal Compatibility**: Works out of the box in Browser (React/Vite) and Node.js environments.
 - **Dynamic Data Extraction**: Automatically flattens and parses cryptographic proofs into easy-to-use JSON claims.
+- **Multi-Proof Merging**: Automatically aggregates and merges claims from multiple proofs into a single unified certificate.
+- **Improved Success Handling**: Reliable processing of both single and array-based proof responses.
 - **Mock Mode**: Built-in mock adapter for rapid frontend development without external connectivity.
-- **ZK Powered**: Uses Reclaim Protocol v4 for secure, private data verification.
+- **ZK Powered**: Integrated with Reclaim Protocol v4 for secure, private data verification.
 
 ## Installation
 
